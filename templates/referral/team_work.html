@@ -54,7 +54,7 @@
 </head>
 
 <body>
-    {% set code ={{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' }}%}
+    {% set code = (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' %}
     {% set ref_link = request.host_url.rstrip('/') ~ url_for('register') ~ '?ref=' ~ code %}
 
     <div class="wrap">

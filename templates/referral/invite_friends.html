@@ -17,7 +17,7 @@
             background: #F0F9F4;
             min-height: 100vh;
             color: #142114;
-            padding: 20px 16px 100px 16px;
+            padding: 20px 16px 110px 16px;
         }
 
         .container {
@@ -403,25 +403,8 @@
         </div>
     </div>
 
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <a href="{{ url_for('dashboard') }}" class="nav-item">
-            <i class="fas fa-home nav-icon"></i>
-            <span class="nav-label">Home</span>
-        </a>
-        <a href="{{ url_for('packages') }}" class="nav-item">
-            <i class="fas fa-box nav-icon"></i>
-            <span class="nav-label">Plans</span>
-        </a>
-        <a href="{{ url_for('referral') }}" class="nav-item active">
-            <i class="fas fa-users nav-icon"></i>
-            <span class="nav-label">Team</span>
-        </a>
-        <a href="{{ url_for('profile') }}" class="nav-item">
-            <i class="fas fa-user nav-icon"></i>
-            <span class="nav-label">Profile</span>
-        </a>
-    </div>
+    {% set active = 'referral' %}
+    {% include 'partials/bottom_nav.html' %}
 
     <script>
         let currentReferralCode = '{{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else "SWIFT123" }}';

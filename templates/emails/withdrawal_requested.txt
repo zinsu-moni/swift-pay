@@ -1,4 +1,4 @@
-SONIC PAY - WITHDRAWAL REQUEST RECEIVED
+SWIFT PAY - WITHDRAWAL REQUEST RECEIVED
 =============================================
 
 Hello {{ name }},

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Team - SONICVEST</title>
+    <title>Team - SWIFTPAY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root{--accent:#1E90FF;--muted:#6B7A6B}
@@ -54,7 +54,7 @@
 </head>
 
 <body>
-    {% set code = (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SONIC123' %}
+    {% set code ={{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' }}%}
     {% set ref_link = request.host_url.rstrip('/') ~ url_for('register') ~ '?ref=' ~ code %}
 
     <div class="wrap">

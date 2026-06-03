@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invite Friends - SONICVEST</title>
+    <title>Invite Friends - SWIFTPAY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
@@ -360,12 +360,12 @@
                 </div>
                 <div class="code-details">
                     <div class="code-label">Invitation Code</div>
-                    <div class="code-value" id="inviteCode">{{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SONIC123' }}</div>
+                    <div class="code-value" id="inviteCode">{{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' }}</div>
                     <button class="copy-code-btn" onclick="copyCode()">Copy Code</button>
 
                     <div class="link-section">
                         <div class="link-label">Invitation Link</div>
-                        <div class="link-value" id="inviteLink">{{ request.url_root }}register?ref={{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SONIC123' }}</div>
+                        <div class="link-value" id="inviteLink">{{ request.url_root }}register?ref={{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' }}</div>
                         <button class="copy-link-btn" onclick="copyLink()">Copy Link</button>
                     </div>
                 </div>
@@ -424,7 +424,7 @@
     </div>
 
     <script>
-        let currentReferralCode = '{{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else "SONIC123" }}';
+        let currentReferralCode = '{{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else "SWIFT123" }}';
         let inviteLink = '{{ request.url_root }}register?ref=' + currentReferralCode;
 
         function copyCode() {

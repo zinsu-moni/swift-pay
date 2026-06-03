@@ -142,7 +142,7 @@ app.config['MAIL_USE_TLS'] = os.environ.get('MAIL_USE_TLS', 'true').lower() in (
 # Read and normalize SMTP settings to avoid invalid sender/auth combinations.
 mail_username = (os.environ.get('MAIL_USERNAME') or '').strip()
 mail_password = (os.environ.get('MAIL_PASSWORD') or '').strip()
-mail_sender_name = (os.environ.get('MAIL_SENDER_NAME') or 'SONICVEST').strip()
+mail_sender_name = (os.environ.get('MAIL_SENDER_NAME') or 'SWIFTPAY').strip()
 mail_sender_email = (os.environ.get('MAIL_SENDER_EMAIL') or mail_username).strip()
 
 app.config['MAIL_USERNAME'] = mail_username or None
@@ -192,7 +192,7 @@ def send_welcome_email(user_name: str, user_email: str, login_url: str):
                     login_url=login_url
                 )
                 msg = Message(
-                    subject='Welcome to SONICVEST - Account created',
+                    subject='Welcome to SWIFTPAY - Account created',
                     recipients=[user_email],
                     sender=app.config.get('MAIL_DEFAULT_SENDER'),
                     body=text_body,
@@ -2355,7 +2355,7 @@ def process_deposit():
             callback_url=callback_url,
             page_url=return_url,
             mch_return_msg=reference,
-            goods_name='SONICVEST Deposit',
+            goods_name='SWIFTPAY Deposit',
         )
 
         print(f"📦 Deposit gateway result for {reference}: {payment_result}")
@@ -2868,7 +2868,7 @@ def withdrawal_receipt(withdrawal_id):
         user=user,
         withdrawal=withdrawal,
         transaction=txn,
-        business_name='SONICVEST',
+        business_name='SWIFTPAY',
         current_time=datetime.now()
     )
 

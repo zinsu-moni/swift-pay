@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Referrals - SONICVEST</title>
+    <title>Referrals - SWIFTPAY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         * {
@@ -29,7 +29,7 @@
         <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Team Work - SONICVEST</title>
+            <title>Team Work - SWIFTPAY</title>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
             <style>
                 * {
@@ -288,7 +288,7 @@
         </head>
 
         <body>
-            {% set code = (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SONIC123' %}
+            {% set code ={{ (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SWIFT123' }}%}
             {% set ref_link = request.host_url ~ 'register?ref=' ~ code %}
 
             <div class="screen">

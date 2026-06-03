@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Withdrawal - Max Wealth</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #F8FAF8;
+            min-height: 100vh;
+            padding-bottom: 100px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #6EC7FF 0%, #4DB8FF 50%, #1E90FF 100%);
+            padding: 24px 20px 32px;
+            margin: -20px -20px 28px -20px;
+            border-bottom-left-radius: 28px;
+            border-bottom-right-radius: 28px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(135,206,235,0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            top: -80px;
+            right: -60px;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            width: 100%;
+        }
+
+        .back-btn {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            text-decoration: none;
+            backdrop-filter: blur(10px);
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-2px);
+        }
+
+        .header-title {
+            color: white;
+            font-size: 22px;
+            font-weight: 900;
+            flex: 1;
+            letter-spacing: -0.02em;
+        }
+
+        /* Balance Card */
+        .balance-card {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 8px 40px rgba(14,72,140,0.08);
+            margin-bottom: 24px;
+            text-align: center;
+            border: 1px solid rgba(14,72,140,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #4DB8FF, #1E90FF);
+        }
+
+        .balance-label {
+            font-size: 13px;
+            color: #6B7A6B;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .balance-amount {
+            font-size: 36px;
+            font-weight: 900;
+            color: #1E90FF;
+            letter-spacing: -0.02em;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 8px 40px rgba(7,30,22,0.08);
+            margin-bottom: 24px;
+            border: 1px solid rgba(7,30,22,0.05);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 800;
+            color: #142114;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .form-input,
+        .form-select {
+            width: 100%;
+            padding: 16px 18px;
+            border: 2px solid #E4EBE4;
+            border-radius: 16px;
+            font-size: 15px;
+            color: #142114;
+            background: #FFFFFF;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #4DB8FF;
+            background: #EEF8FF;
+            box-shadow: 0 0 0 4px rgba(30,144,255,0.1);
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+        }
+
+        .input-prefix {
+            padding: 16px 18px;
+            background: linear-gradient(135deg, #EEF8FF 0%, #DFF4FF 100%);
+            border: 2px solid #1E90FF;
+            border-right: none;
+            border-radius: 16px 0 0 16px;
+            font-size: 18px;
+            font-weight: 800;
+            color: #1E90FF;
+        }
+
+        .input-group .form-input {
+            border-radius: 0 16px 16px 0;
+            border-left: none;
+        }
+
+        .form-text {
+            font-size: 13px;
+            color: #6B7A6B;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Notice */
+        .notice {
+            background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+            border-left: 4px solid #F59E0B;
+            border-radius: 18px;
+            padding: 20px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(245,158,11,0.08);
+        }
+
+        .notice-title {
+            font-size: 15px;
+            font-weight: 800;
+            color: #92400E;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .notice-title i {
+            color: #F59E0B;
+            font-size: 18px;
+        }
+
+        .notice-text {
+            font-size: 14px;
+            color: #78350F;
+            line-height: 1.7;
+            font-weight: 500;
+        }
+
+        /* Checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .checkbox-group input {
+            width: 22px;
+            height: 22px;
+            margin-top: 2px;
+            accent-color: #4DB8FF;
+            cursor: pointer;
+        }
+
+        .checkbox-group label {
+            font-size: 14px;
+            color: #142114;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Submit Button (modern) */
+        .submit-btn {
+            width: 100%;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, var(--accent-2, #4DB8FF) 0%, var(--accent, #1E90FF) 100%);
+            color: #071018;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 900;
+            cursor: pointer;
+            transition: transform 0.14s ease, box-shadow 0.14s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            box-shadow: 0 12px 30px rgba(30,144,255,0.12);
+        }
+
+        .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(30,144,255,0.14); }
+
+        .submit-btn:disabled { cursor: not-allowed; opacity: 0.6; transform: none; box-shadow: none; }
+
+        .lock-note {
+            margin-top: 14px;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #FEE2E2 0%, #FECACA 100%);
+            color: #991B1B;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.6;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 12px 16px 24px;
+            box-shadow: 0 -8px 32px rgba(14,72,140,0.12);
+            z-index: 1000;
+            border-top: 1px solid rgba(14,72,140,0.06);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #9CA69C;
+            padding: 8px 16px;
+            border-radius: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: #1E90FF;
+            background: linear-gradient(135deg, #EEF8FF 0%, #DFF4FF 100%);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <a href="{{ url_for('dashboard') }}" class="back-btn">
+                    <i class="fas fa-arrow-left"></i>
+                </a>
+                <h1 class="header-title">Request Withdrawal</h1>
+            </div>
+        </div>
+
+        <!-- Balance Card -->
+        <div class="balance-card">
+            <div class="balance-label">Available Balance</div>
+            <div class="balance-amount">₦{{ (current_user.main_balance or 0) | format_number }}</div>
+        </div>
+
+        <div class="notice">
+            <div class="notice-title">
+                <i class="fas fa-clock"></i>
+                Withdrawal Window
+            </div>
+            <div class="notice-text">
+                Withdrawals are available from {{ withdrawal_hours }}.
+                Expected processing time: 0-2 hours.
+            </div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-card">
+            <form action="{{ url_for('process_withdrawal') }}" method="post" id="withdrawal-form" data-min="{{ SYSTEM_SETTINGS.MINIMUM_WITHDRAWAL | tojson }}" data-max="{{ (current_user.main_balance or 0) | tojson }}">
+                <div class="form-group">
+                    <label class="form-label">Amount to Withdraw</label>
+                    <div class="input-group">
+                        <span class="input-prefix">₦</span>
+                        <input type="number" class="form-input" id="amount" name="amount" step="0.01" required>
+                    </div>
+                    <div class="form-text">Minimum withdrawal: ₦{{ SYSTEM_SETTINGS.MINIMUM_WITHDRAWAL | format_number }}</div>
+                </div>
+
+                <!-- Show saved bank details and submit them as hidden fields -->
+                <div class="form-group">
+                    <label class="form-label">Withdrawal To</label>
+                    <div style="padding:12px;border-radius:12px;border:1px solid #e6eef6;background:#fbfeff">
+                        <div style="font-size:14px;font-weight:800;color:#142114">{{ current_user.account_name or 'No account on file' }}</div>
+                        <div style="color:#6b7280;margin-top:6px">{{ current_user.account_number or 'N/A' }} • {{ current_user.bank_name or current_user.other_bank or 'N/A' }}</div>
+                    </div>
+                    <input type="hidden" name="bank_name" value="{{ current_user.bank_name or '' }}">
+                    <input type="hidden" name="other_bank" value="{{ current_user.other_bank or '' }}">
+                    <input type="hidden" name="account_number" value="{{ current_user.account_number or '' }}">
+                    <input type="hidden" name="account_name" value="{{ current_user.account_name or '' }}">
+                </div>
+
+                <!-- confirmation removed -->
+
+            </form>
+        </div>
+
+        <!-- Important notice and duplicate confirmation removed -->
+
+        <!-- Submit -->
+        <button type="submit" form="withdrawal-form" class="submit-btn">
+            <i class="fas fa-paper-plane"></i>
+            Submit Withdrawal Request
+        </button>
+
+        {% if withdrawal_locked %}
+        <div class="lock-note">
+            Withdrawal hours are {{ withdrawal_hours }}. If you still cannot submit, refresh the page and try again.
+        </div>
+        {% endif %}
+    </div>
+
+    {% set active = '' %}
+    {% include 'partials/bottom_nav.html' %}
+    <script>
+        const form = document.getElementById('withdrawal-form');
+        const min = parseFloat(form.dataset.min || '0');
+        const max = parseFloat(form.dataset.max || '0');
+
+        form.addEventListener('submit', function(e) {
+            const amount = parseFloat(document.getElementById('amount').value);
+
+            if (isNaN(amount)) {
+                e.preventDefault();
+                alert('Enter a valid amount');
+                return false;
+            }
+
+            if (amount < min) {
+                e.preventDefault();
+                alert('Minimum withdrawal is ₦' + Number(min).toLocaleString());
+                return false;
+            }
+
+            if (amount > max) {
+                e.preventDefault();
+                alert('Insufficient balance');
+                return false;
+            }
+        });
+    </script>    
+    <!-- Vercel Web Analytics -->
+    <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
+
+</body>
+</html>

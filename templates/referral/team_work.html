@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Team - SONICVEST</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        :root{--accent:#1E90FF;--muted:#6B7A6B}
+        html,body{height:100%}
+        body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial;margin:0;background:#F7FBF8;padding:18px 12px 110px}
+        .wrap{max-width:520px;margin:0 auto}
+        .title{text-align:center;margin-bottom:18px}
+        .title h1{color:var(--accent);font-size:26px;margin:0;font-weight:900}
+        .title p{color:var(--muted);margin:6px 0 0}
+
+        .card{background:#fff;border-radius:18px;padding:16px;border:1px solid rgba(0,0,0,0.04);box-shadow:0 8px 28px rgba(14,72,140,0.04);margin-bottom:14px}
+
+        .invite-row{display:flex;gap:10px;align-items:center}
+        .invite-badge{background:#fff;padding:10px 12px;border-radius:12px;border:1px solid rgba(14,72,140,0.04);font-weight:800;flex:1}
+        .invite-copy{background:linear-gradient(135deg,#FFDFAF,#FFE9C2);border:none;padding:10px 12px;border-radius:10px;font-weight:800;color:#5A3B00}
+
+        .link-box{margin-top:12px;background:linear-gradient(135deg,#EEF8FF,#DFF4FF);padding:12px;border-radius:12px;border:2px dashed var(--accent);word-break:break-all}
+        .btn-primary{width:100%;margin-top:12px;background:linear-gradient(135deg,#4DB8FF,#1E90FF);border:none;color:#fff;padding:14px;border-radius:12px;font-weight:800}
+
+        .qr-wrap{display:flex;justify-content:center;margin-top:12px}
+
+        .wallets{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+        .wallet{background:linear-gradient(180deg,#FFFDF6,#FFF7E0);padding:12px;border-radius:12px;text-align:center;border:1px solid rgba(14,72,140,0.04)}
+        .wallet .label{color:#6B4F00;font-weight:800;margin-bottom:6px}
+        .wallet .value{font-weight:900}
+
+        .stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px}
+        .stat{background:#fff;border-radius:12px;padding:12px;text-align:center;border:1px solid rgba(14,72,140,0.04)}
+        .stat .num{color:var(--accent);font-weight:900;font-size:18px}
+        .stat .label{color:var(--muted);font-weight:700;font-size:12px;margin-top:6px}
+
+        .team-level{margin-top:12px}
+        .level{background:#fff;border-radius:12px;padding:12px;border:1px solid rgba(14,72,140,0.04);margin-bottom:10px}
+        .level .row{display:flex;justify-content:space-between;color:var(--muted);font-weight:700;font-size:13px}
+        .level .row .v{color:#142114;font-weight:900}
+
+        .bottom-nav{position:fixed;left:0;right:0;bottom:0;background:#fff;padding:12px 14px 28px;box-shadow:0 -8px 30px rgba(14,72,140,0.08);border-top:1px solid rgba(14,72,140,0.06)}
+        .nav{max-width:520px;margin:0 auto;display:flex;justify-content:space-around}
+        .nav a{display:flex;flex-direction:column;align-items:center;color:#9CA69C;text-decoration:none;padding:6px 12px;border-radius:12px}
+        /* Override browser link styles that may show as purple/underlined */
+        .nav a, .nav a * { text-decoration: none !important; color: inherit !important; }
+        .nav a span{font-size:12px; margin-top:4px}
+        .nav a.active{color:var(--accent);background:linear-gradient(135deg,#EEF8FF,#DFF4FF)}
+
+        @media (max-width:420px){body{padding-bottom:120px}.title h1{font-size:22px}}
+    </style>
+</head>
+
+<body>
+    {% set code = (user.referral_code if user else current_user.referral_code) if (user or current_user) else 'SONIC123' %}
+    {% set ref_link = request.host_url.rstrip('/') ~ url_for('register') ~ '?ref=' ~ code %}
+
+    <div class="wrap">
+        <div class="title">
+            <h1>Team</h1>
+            <p>Invite friends — earn commissions</p>
+        </div>
+
+        <div class="card">
+            <div class="invite-row">
+                <div class="invite-badge">{{ code }}</div>
+                <button class="invite-copy" id="copyCodeSmall">Copy</button>
+            </div>
+            <div class="link-box" id="refLink">{{ ref_link }}</div>
+            <div class="qr-wrap"><div id="qrcode"></div></div>
+            <button class="btn-primary" id="copyLink">Copy Link</button>
+        </div>
+
+        <div class="wallets">
+            <div class="wallet">
+                <div class="label">Recharge Wallet</div>
+                <div class="value">₦{{ recharge_wallet | format_number if recharge_wallet else 0 }}</div>
+            </div>
+            <div class="wallet">
+                <div class="label">Withdrawal Wallet</div>
+                <div class="value">₦{{ withdrawal_wallet | format_number if withdrawal_wallet else 0 }}</div>
+            </div>
+        </div>
+
+        <div class="stats" style="margin-top:12px">
+            <div class="stat">
+                <div class="num">{{ total_referrals or 0 }}</div>
+                <div class="label">Total Referrals</div>
+            </div>
+            <div class="stat">
+                <div class="num">₦{{ total_commission | format_number if total_commission else 0 }}</div>
+                <div class="label">Total Earned</div>
+            </div>
+        </div>
+
+        <div class="team-level">
+            <div class="level">
+                <div class="row"><div>Recharge money</div><div class="v">₦{{ level1_recharge | format_number if level1_recharge else 0 }}</div></div>
+                <div class="row"><div>Total people</div><div class="v">{{ level1_referrals|length if level1_referrals else 0 }}</div></div>
+                <div class="row"><div>Commission rate</div><div class="v">{{ level1_rate_pct }}%</div></div>
+            </div>
+            <div class="level">
+                <div class="row"><div>Recharge money</div><div class="v">₦{{ level2_recharge | format_number if level2_recharge else 0 }}</div></div>
+                <div class="row"><div>Total people</div><div class="v">{{ level2_referrals|length if level2_referrals else 0 }}</div></div>
+                <div class="row"><div>Commission rate</div><div class="v">{{ level2_rate_pct }}%</div></div>
+            </div>
+            <div class="level">
+                <div class="row"><div>Recharge money</div><div class="v">₦{{ level3_recharge | format_number if level3_recharge else 0 }}</div></div>
+                <div class="row"><div>Total people</div><div class="v">{{ level3_referrals|length if level3_referrals else 0 }}</div></div>
+                <div class="row"><div>Commission rate</div><div class="v">{{ level3_rate_pct }}%</div></div>
+            </div>
+        </div>
+    </div>
+
+    {% set active = 'referral' %}
+    {% include 'partials/bottom_nav.html' %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        const copyCodeSmall = document.getElementById('copyCodeSmall');
+        const copyLink = document.getElementById('copyLink');
+        const refLinkEl = document.getElementById('refLink');
+        const qrcodeEl = document.getElementById('qrcode');
+
+        function renderQRCode(value){ if(!qrcodeEl) return; qrcodeEl.innerHTML=''; new QRCode(qrcodeEl, { text: value, width: 160, height: 160 }); }
+
+        // initial render
+        document.addEventListener('DOMContentLoaded', ()=>{
+            const val = refLinkEl ? refLinkEl.textContent.trim() : '';
+            if(val) renderQRCode(val);
+        });
+
+        if (copyCodeSmall) copyCodeSmall.addEventListener('click', async ()=>{
+            const code = '{{ code }}';
+            try{ await navigator.clipboard.writeText(code) }catch(e){ const ta=document.createElement('textarea'); ta.value=code; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta) }
+            const old=copyCodeSmall.textContent; copyCodeSmall.textContent='Copied'; setTimeout(()=>copyCodeSmall.textContent=old,1400);
+        });
+
+        if (copyLink) copyLink.addEventListener('click', async ()=>{
+            const v = refLinkEl ? refLinkEl.textContent.trim() : '';
+            if(!v) return;
+            try{ await navigator.clipboard.writeText(v) }catch(e){ const ta=document.createElement('textarea'); ta.value=v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); document.body.removeChild(ta) }
+            const old=copyLink.textContent; copyLink.textContent='Copied'; setTimeout(()=>copyLink.textContent=old,1400);
+        });
+    </script>
+</body>
+
+</html>

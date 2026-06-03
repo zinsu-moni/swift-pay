@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdrawal History - SONICVEST</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root{--brand-500:#1EA7FF;--brand-600:#1E90FF;--muted:#6B7A7A}
+        *{box-sizing:border-box}
+        body{margin:0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:linear-gradient(180deg,#f5fbff 0%,#eef9ff 60%);color:#0f1720;min-height:100vh;padding:18px 14px 110px}
+        .wrap{max-width:720px;margin:0 auto}
+        .header{display:flex;align-items:center;gap:14px;margin-bottom:16px}
+        .back-btn{width:44px;height:44px;border-radius:12px;background:#fff;border:1px solid rgba(7,30,22,0.04);display:inline-flex;align-items:center;justify-content:center;color:var(--brand-600);text-decoration:none}
+        .title{font-size:20px;font-weight:900;margin:0}
+
+        .summary{display:flex;gap:12px;margin:14px 0 18px;flex-wrap:wrap}
+        .summary .tile{flex:1;min-width:160px;background:#fff;border-radius:14px;padding:14px;border:1px solid rgba(7,30,22,0.04);box-shadow:0 8px 26px rgba(8,60,120,0.04)}
+        .tile .val{font-weight:900;color:var(--brand-600);font-size:18px}
+        .tile .lbl{font-size:12px;color:var(--muted);margin-top:6px;font-weight:700}
+
+        .controls{display:flex;gap:8px;align-items:center;justify-content:space-between;margin-bottom:12px}
+        .filters{display:flex;gap:8px}
+        .pill{background:#fff;border:1px solid rgba(7,30,22,0.04);padding:8px 12px;border-radius:999px;font-weight:800;color:var(--brand-600);cursor:pointer}
+        .pill.active{background:linear-gradient(135deg,rgba(77,184,255,0.12),#eef9ff);box-shadow:0 8px 20px rgba(30,144,255,0.06)}
+
+        .list{display:flex;flex-direction:column;gap:12px}
+        .withdrawal-card{background:linear-gradient(180deg,#fff, #fbfeff);border-radius:14px;padding:14px;border:1px solid rgba(7,30,22,0.04);box-shadow:0 12px 40px rgba(8,60,120,0.04);display:flex;flex-direction:column}
+        .card-top{display:flex;justify-content:space-between;align-items:center;gap:12px}
+        .amount{font-weight:900;color:var(--brand-600);font-size:18px}
+        .status-chip{padding:6px 10px;border-radius:999px;font-weight:800;font-size:12px;text-transform:uppercase}
+        .status-completed{background:#eafaf1;color:#05683b;border:1px solid rgba(5,104,59,0.08)}
+        .status-pending{background:#fff8e6;color:#6a4b00;border:1px solid rgba(255,193,7,0.08)}
+        .status-failed{background:#fff0f2;color:#9b1f2d;border:1px solid rgba(155,31,45,0.06)}
+
+        .meta{display:grid;grid-template-columns:1fr auto;gap:6px;margin-top:10px;color:var(--muted);font-size:13px}
+        .meta .label{font-weight:700;color:#374151}
+        .meta .value{text-align:right;font-weight:800;color:#0f1720}
+
+        .receipt-btn{align-self:flex-end;margin-top:10px;background:linear-gradient(135deg,var(--brand-500),var(--brand-600));color:#071018;padding:10px 14px;border-radius:999px;text-decoration:none;font-weight:800;display:inline-flex;gap:8px}
+
+        .empty{background:#fff;border-radius:14px;padding:28px;text-align:center;border:1px solid rgba(7,30,22,0.04)}
+        .empty i{font-size:44px;color:var(--brand-600);margin-bottom:8px}
+
+        @media(max-width:720px){.wrap{padding:0 8px}.summary{flex-direction:column}}
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+            <a href="{{ url_for('profile') }}" class="back-btn" aria-label="Back">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <h1 class="title">Withdraw Record</h1>
+        </div>
+
+        <div class="summary">
+            <div class="tile">
+                <div class="val">NGN{{ total_withdrawals | format_number }}</div>
+                <div class="lbl">Total Withdrawn</div>
+            </div>
+            <div class="tile">
+                <div class="val">NGN{{ pending_withdrawals | format_number }}</div>
+                <div class="lbl">Pending</div>
+            </div>
+            <div class="tile">
+                <div class="val">{{ successful_withdrawals }}</div>
+                <div class="lbl">Successful</div>
+            </div>
+            <div class="tile">
+                <div class="val">NGN{{ total_fees_paid | format_number }}</div>
+                <div class="lbl">Fees Paid</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div></div>
+            <div class="filters" role="tablist" aria-label="Filter withdrawals">
+                <button type="button" class="pill active" data-filter="all">All</button>
+                <button type="button" class="pill" data-filter="pending">Pending</button>
+                <button type="button" class="pill" data-filter="completed">Completed</button>
+                <button type="button" class="pill" data-filter="failed">Failed</button>
+            </div>
+        </div>
+
+        {% if withdrawals %}
+        {% for withdrawal in withdrawals %}
+        {% set is_completed = withdrawal.status in ['completed', 'approved', 'processed'] %}
+        <div class="withdrawal-card" data-status="{{ 'completed' if is_completed else withdrawal.status }}">
+            <div class="card-top">
+                <span class="amount">-NGN{{ withdrawal.amount | format_number }}</span>
+                {% if is_completed %}
+                <span class="status-chip status-completed">Completed</span>
+                {% elif withdrawal.status == 'pending' %}
+                <span class="status-chip status-pending">Pending</span>
+                {% else %}
+                <span class="status-chip status-failed">{{ withdrawal.status|title }}</span>
+                {% endif %}
+            </div>
+
+            <div class="meta">
+                <span>Reference ID:</span>
+                <span class="value">{{ withdrawal.reference or 'WD' + withdrawal.id|string +
+                    withdrawal.created_at.strftime('%m%d') }}</span>
+            </div>
+            <div class="meta">
+                <span>Fee ({{ (withdrawal_fee_rate * 100)|int }}%):</span>
+                <span class="value">NGN{{ (withdrawal.amount * withdrawal_fee_rate) | format_number }}</span>
+            </div>
+            <div class="meta">
+                <span>Net Amount:</span>
+                <span class="value">NGN{{ (withdrawal.amount * (1 - withdrawal_fee_rate)) | format_number }}</span>
+            </div>
+            {% if withdrawal.description %}
+            <div class="meta">
+                <span>Description:</span>
+                <span class="value">{{ withdrawal.description }}</span>
+            </div>
+            {% endif %}
+            <div class="meta">
+                <span>Date:</span>
+                <span class="value">{{ withdrawal.created_at.strftime('%b %d, %Y at %I:%M %p') }}</span>
+            </div>
+
+            <a href="{{ url_for('withdrawal_receipt', withdrawal_id=withdrawal.id) }}" class="receipt-btn">
+                <i class="fas fa-receipt"></i>
+                View Receipt
+            </a>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="empty">
+            <i class="fas fa-money-bill-wave"></i>
+            <h3>No Withdrawal Records</h3>
+            <p>You have not made any withdrawal requests yet.</p>
+            <a href="{{ url_for('request_withdrawal') }}" class="receipt-btn">
+                <i class="fas fa-plus"></i>
+                Make Withdrawal
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <script>
+        (function(){
+            const pills = document.querySelectorAll('.pill');
+            const cards = document.querySelectorAll('.withdrawal-card');
+            function setActive(el){ pills.forEach(p=>p.classList.toggle('active', p===el)); }
+            function applyFilter(filter){
+                cards.forEach(card=>{
+                    const status = (card.dataset.status||'').toLowerCase();
+                    if(filter==='all'){ card.style.display = ''; return; }
+                    if(filter==='completed' && status==='completed'){ card.style.display = ''; return; }
+                    if(filter==='pending' && status==='pending'){ card.style.display = ''; return; }
+                    if(filter==='failed' && (status==='failed' || status==='rejected' || status==='cancelled')){ card.style.display = ''; return; }
+                    card.style.display = 'none';
+                });
+            }
+            pills.forEach(p=>p.addEventListener('click', e=>{ e.preventDefault(); setActive(p); applyFilter(p.dataset.filter); }));
+        })();
+    </script>
+</body>
+
+</html>

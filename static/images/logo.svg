@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 220" width="900" height="220" role="img" aria-label="SONICVEST logo">
+  <defs>
+    <linearGradient id="svGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#78f0a3"/>
+      <stop offset="55%" stop-color="#45d980"/>
+      <stop offset="100%" stop-color="#1fb35e"/>
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(16,8)">
+    <path fill="url(#svGreen)" d="M190 14c-54-15-119 14-129 58-8 34 18 54 67 69 40 12 58 20 56 36-2 22-31 34-73 34-33 0-63-8-89-25l-12 22c31 20 66 30 107 30 61 0 109-25 114-72 4-40-29-58-80-73-36-11-51-18-50-33 1-13 24-24 52-24 30 0 58 10 76 27l18-19c-19-18-45-28-77-30z"/>
+    <rect x="58" y="147" width="17" height="44" rx="3" fill="url(#svGreen)"/>
+    <rect x="81" y="136" width="17" height="55" rx="3" fill="url(#svGreen)"/>
+    <rect x="104" y="123" width="17" height="68" rx="3" fill="url(#svGreen)"/>
+    <rect x="127" y="110" width="17" height="81" rx="3" fill="url(#svGreen)"/>
+    <rect x="150" y="96" width="17" height="95" rx="3" fill="url(#svGreen)"/>
+    <path d="M112 124l90-72" stroke="url(#svGreen)" stroke-width="15" stroke-linecap="round" fill="none"/>
+    <path d="M184 45h43v43" stroke="url(#svGreen)" stroke-width="15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+
+  <text x="284" y="144" font-family="Montserrat, Poppins, 'Segoe UI', Arial, sans-serif" font-size="84" font-weight="800" letter-spacing="2" fill="#ffffff">SONICVEST</text>
+</svg>

@@ -6,21 +6,18 @@
     <title>Bank Transfer - SWIFTPAY</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         :root {
-            --bg: #eaf6ff;
-            --bg-2: #dff1ff;
-            --surface: rgba(255, 255, 255, 0.86);
-            --surface-strong: rgba(240, 248, 255, 0.98);
-            --border: rgba(30, 144, 255, 0.14);
-            --text: #07304f;
-            --muted: #6B7A8B;
-            --accent: #1E90FF;
-            --accent-2: #4DB8FF;
-            --accent-3: #BEEAFF;
-            --shadow: 0 24px 70px rgba(30, 144, 255, 0.18);
+            --sky-light: #eaf6ff;
+            --sky-medium: #4DB8FF;
+            --sky-primary: #1E90FF;
+            --sky-dark: #0066cc;
+            --white: #ffffff;
+            --text-dark: #07304f;
+            --text-muted: #6B7A8B;
+            --border-light: rgba(30, 144, 255, 0.12);
         }
 
         * {
@@ -35,144 +32,153 @@
 
         body {
             min-height: 100vh;
-            color: var(--text);
+            color: var(--text-dark);
             font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background:
-                radial-gradient(circle at 15% 15%, rgba(77, 184, 255, 0.18), transparent 30%),
-                radial-gradient(circle at 80% 10%, rgba(30, 144, 255, 0.16), transparent 24%),
-                radial-gradient(circle at 80% 85%, rgba(190, 234, 255, 0.72), transparent 26%),
-                linear-gradient(180deg, #f5fbff 0%, #eaf6ff 46%, #dff1ff 100%);
-            overflow-x: hidden;
+            background: linear-gradient(180deg, #f5fbff 0%, #eaf6ff 46%, #dff1ff 100%);
         }
 
-        body::before,
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        body::before {
-            background-image: linear-gradient(rgba(30, 144, 255, 0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(30, 144, 255, 0.06) 1px, transparent 1px);
-            background-size: 42px 42px;
-            mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.24), rgba(0, 0, 0, 0.06));
-        }
-
-        body::after {
-            background: radial-gradient(circle at 50% 0%, rgba(77, 184, 255, 0.2), transparent 42%);
-            opacity: 0.7;
-        }
-
-        .container {
+        .page-container {
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 24px 16px 120px;
             position: relative;
             z-index: 1;
-            width: min(100%, 520px);
-            margin: 0 auto;
-            padding: 24px 16px 28px;
         }
 
         /* Header */
-        .header {
+        .page-header {
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 16px;
+            margin-bottom: 28px;
+        }
+
+        .back-button {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            background: rgba(255,255,255,0.9);
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            background: white;
+            border-color: var(--sky-primary);
+        }
+
+        .header-text h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+
+        .header-text p {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-top: 4px;
+            font-weight: 500;
+        }
+
+        /* Step Indicators */
+        .step-indicator {
+            display: flex;
+            gap: 8px;
+            align-items: center;
             margin-bottom: 24px;
         }
 
-        .back-btn {
-            width: 46px;
-            height: 46px;
-            border-radius: 16px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(30, 144, 255, 0.12);
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text);
-            text-decoration: none;
-            cursor: pointer;
-            transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-            backdrop-filter: blur(14px);
-        }
-
-        .back-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(255,255,255,1);
-            border-color: rgba(30, 144, 255, 0.2);
-        }
-
-        .header-text {
+        .step-dot {
             flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(30,144,255,0.2);
         }
 
-        .header-title {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: clamp(24px, 4vw, 32px);
-            line-height: 1;
-            font-weight: 700;
-            letter-spacing: -0.05em;
-            color: var(--text);
+        .step-dot.active {
+            background: linear-gradient(90deg, var(--sky-medium), var(--sky-primary));
         }
 
         /* Cards */
-        .card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: 24px;
+        .content-card {
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
             padding: 24px;
-            backdrop-filter: blur(16px);
-            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            box-shadow: 0 8px 30px rgba(30, 144, 255, 0.1);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
-        .card-title {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--text);
-            margin-bottom: 18px;
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--sky-light), var(--sky-medium));
             display: flex;
             align-items: center;
-            gap: 10px;
-        }
-
-        .card-title i {
-            color: var(--accent);
+            justify-content: center;
+            color: var(--sky-primary);
             font-size: 20px;
         }
 
+        .card-header h2 {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
         /* Bank Details */
-        .bank-detail {
+        .bank-details-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .bank-detail-item {
+            padding: 16px;
+            background: linear-gradient(135deg, #f8fbff, #f0f7ff);
+            border-radius: 14px;
+            border: 1px solid var(--border-light);
+        }
+
+        .detail-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .detail-value-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 0;
-            border-bottom: 1px solid rgba(30,144,255,0.12);
         }
 
-        .bank-detail:last-child {
-            border-bottom: none;
-        }
-
-        .bank-label {
-            font-size: 14px;
-            color: var(--muted);
-            font-weight: 600;
-        }
-
-        .bank-value {
-            font-size: 14px;
+        .detail-value {
+            font-size: 16px;
             font-weight: 800;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            color: var(--text-dark);
         }
 
         .copy-btn {
-            background: linear-gradient(135deg, var(--accent-3), var(--accent-2));
-            color: var(--text);
+            background: var(--sky-primary);
+            color: white;
             border: none;
             border-radius: 10px;
             padding: 8px 14px;
@@ -180,24 +186,26 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .copy-btn:hover {
-            background: linear-gradient(135deg, var(--accent-2), var(--accent));
+            background: var(--sky-dark);
             transform: translateY(-1px);
         }
 
-        /* Notice */
-        .notice {
-            background: rgba(245,158,11,0.1);
-            border-left: 4px solid #F59E0B;
-            border-radius: 18px;
-            padding: 18px;
+        /* Instructions */
+        .instructions-box {
+            background: linear-gradient(135deg, #FFFBEB, #FEF3C7);
+            border-left: 4px solid #f59e0b;
+            border-radius: 16px;
+            padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 4px 16px rgba(245,158,11,0.06);
         }
 
-        .notice-title {
+        .instructions-title {
             font-size: 15px;
             font-weight: 800;
             color: #92400E;
@@ -207,91 +215,107 @@
             gap: 10px;
         }
 
-        .notice-title i {
-            color: #F59E0B;
+        .instructions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
 
-        .notice-text {
+        .instructions-list li {
             font-size: 14px;
             color: #78350F;
             line-height: 1.7;
+            margin-bottom: 10px;
             font-weight: 500;
+            display: flex;
+            gap: 10px;
+        }
+
+        .instructions-list li:last-child {
+            margin-bottom: 0;
         }
 
         /* File Upload */
-        .file-upload {
-            background: linear-gradient(135deg, rgba(30,144,255,0.08), rgba(77,184,255,0.12));
-            border: 2px dashed var(--accent);
-            border-radius: 20px;
+        .upload-area {
+            border: 2px dashed var(--sky-primary);
+            border-radius: 18px;
             padding: 36px 20px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            background: linear-gradient(135deg, rgba(30,144,255,0.05), rgba(77,184,255,0.08));
         }
 
-        .file-upload:hover {
-            background: linear-gradient(135deg, rgba(30,144,255,0.12), rgba(77,184,255,0.16));
+        .upload-area:hover {
+            border-color: var(--sky-dark);
+            background: linear-gradient(135deg, rgba(30,144,255,0.1), rgba(77,184,255,0.12));
             transform: translateY(-2px);
         }
 
-        .file-upload i {
-            font-size: 48px;
-            color: var(--accent);
+        .upload-icon {
+            font-size: 44px;
+            color: var(--sky-primary);
             margin-bottom: 14px;
         }
 
-        .file-upload-text {
-            font-size: 15px;
-            color: var(--text);
+        .upload-text-main {
+            font-size: 16px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
 
-        .file-upload-small {
+        .upload-text-sub {
             font-size: 13px;
-            color: var(--muted);
+            color: var(--text-muted);
             font-weight: 500;
-        }
-
-        .file-name {
-            margin-top: 14px;
-            font-size: 14px;
-            font-weight: 700;
-            color: var(--text);
-            display: none;
         }
 
         #fileInput {
             display: none;
         }
 
+        .file-info {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .file-name-display {
+            background: var(--sky-light);
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
         .preview-image {
             max-width: 100%;
-            border-radius: 14px;
+            border-radius: 12px;
             margin-top: 14px;
             display: none;
-            box-shadow: 0 4px 16px rgba(30,144,255,0.1);
+            box-shadow: 0 4px 16px rgba(30,144,255,0.12);
         }
 
         /* Submit Button */
         .submit-btn {
             width: 100%;
+            margin-top: 24px;
             padding: 18px;
-            background: linear-gradient(135deg, var(--accent-2), var(--accent));
-            color: #071018;
+            background: linear-gradient(135deg, var(--sky-medium), var(--sky-primary));
+            color: white;
             border: none;
             border-radius: 16px;
             font-size: 16px;
             font-weight: 900;
             cursor: pointer;
-            margin-top: 18px;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            box-shadow: 0 12px 30px rgba(30,144,255,0.18);
+            box-shadow: 0 10px 30px rgba(30,144,255,0.25);
             text-transform: uppercase;
+            letter-spacing: 0.05em;
         }
 
         .submit-btn:hover:not(:disabled) {
@@ -318,28 +342,80 @@
         }
 
         .alert-success {
-            background: linear-gradient(135deg, var(--accent-3), rgba(77,184,255,0.3));
-            border: 1px solid var(--accent-2);
-            color: var(--text);
+            background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+            border: 1px solid #10b981;
+            color: #065f46;
         }
 
         .alert-error {
-            background: linear-gradient(135deg, #FEE2E2, #FECACA);
-            border: 1px solid #FCA5A5;
-            color: #991B1B;
+            background: linear-gradient(135deg, #fee2e2, #fecaca);
+            border: 1px solid #ef4444;
+            color: #991b1b;
+        }
+
+        /* Bottom Nav */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 12px 16px 24px;
+            box-shadow: 0 -8px 32px rgba(14,72,140,0.12);
+            border-top: 1px solid rgba(14,72,140,0.06);
+        }
+
+        .nav-items {
+            display: flex;
+            justify-content: space-around;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            color: #9ca69c;
+            padding: 8px 16px;
+            border-radius: 14px;
+            transition: all 0.2s;
+        }
+
+        .nav-item.active {
+            color: var(--sky-primary);
+            background: linear-gradient(135deg, #eaf6ff, #dff1ff);
+        }
+
+        .nav-icon {
+            font-size: 22px;
+        }
+
+        .nav-label {
+            font-size: 12px;
+            font-weight: 700;
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="page-container">
         <!-- Header -->
-        <div class="header">
-            <a href="{{ url_for('deposit') }}" class="back-btn">
+        <div class="page-header">
+            <a href="{{ url_for('deposit') }}" class="back-button">
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div class="header-text">
-                <h1 class="header-title">Bank Transfer</h1>
+                <h1>Bank Transfer</h1>
+                <p>Deposit via bank transfer</p>
             </div>
+        </div>
+
+        <!-- Step Indicator -->
+        <div class="step-indicator">
+            <div class="step-dot active"></div>
+            <div class="step-dot"></div>
         </div>
 
         <!-- Alerts -->
@@ -353,63 +429,99 @@
         </div>
 
         <!-- Bank Details Card -->
-        <div class="card">
-            <h2 class="card-title">
-                <i class="fas fa-university"></i>
-                Bank Account Details
-            </h2>
-
-            <div class="bank-detail">
-                <span class="bank-label">Bank Name</span>
-                <span class="bank-value">
-                    {{ bank_details.bank_name }}
-                    <button class="copy-btn" onclick="copyText('{{ bank_details.bank_name }}')">Copy</button>
-                </span>
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-university"></i>
+                </div>
+                <h2>Bank Account Info</h2>
             </div>
-            <div class="bank-detail">
-                <span class="bank-label">Account Number</span>
-                <span class="bank-value">
-                    {{ bank_details.account_number }}
-                    <button class="copy-btn" onclick="copyText('{{ bank_details.account_number }}')">Copy</button>
-                </span>
-            </div>
-            <div class="bank-detail">
-                <span class="bank-label">Account Name</span>
-                <span class="bank-value">
-                    {{ bank_details.account_name }}
-                    <button class="copy-btn" onclick="copyText('{{ bank_details.account_name }}')">Copy</button>
-                </span>
+            
+            <div class="bank-details-list">
+                <div class="bank-detail-item">
+                    <div class="detail-label">Bank Name</div>
+                    <div class="detail-value-row">
+                        <span class="detail-value">{{ bank_details.bank_name }}</span>
+                        <button class="copy-btn" onclick="copyText('{{ bank_details.bank_name }}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bank-detail-item">
+                    <div class="detail-label">Account Number</div>
+                    <div class="detail-value-row">
+                        <span class="detail-value">{{ bank_details.account_number }}</span>
+                        <button class="copy-btn" onclick="copyText('{{ bank_details.account_number }}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bank-detail-item">
+                    <div class="detail-label">Account Name</div>
+                    <div class="detail-value-row">
+                        <span class="detail-value">{{ bank_details.account_name }}</span>
+                        <button class="copy-btn" onclick="copyText('{{ bank_details.account_name }}')">
+                            <i class="fas fa-copy"></i> Copy
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- Notice -->
-        <div class="notice">
-            <div class="notice-title">
+        <!-- Instructions -->
+        <div class="instructions-box">
+            <div class="instructions-title">
                 <i class="fas fa-info-circle"></i>
-                Important Notice
+                How to Complete Your Deposit
             </div>
-            <p class="notice-text">
-                After payment, upload your payment receipt below. Your deposit will be credited after admin verification (usually within 1-24 hours).
-            </p>
+            <ul class="instructions-list">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Transfer the deposit amount to the bank account above</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Make sure to use the exact account details to avoid delays</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Take a clear screenshot or photo of your payment receipt</span>
+                </li>
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <span>Upload the receipt below and submit your deposit request</span>
+                </li>
+            </ul>
         </div>
 
-        <!-- Upload Form -->
-        <div class="card">
-            <h2 class="card-title">
-                <i class="fas fa-file-upload"></i>
-                Upload Payment Proof
-            </h2>
-
+        <!-- Upload Receipt Card -->
+        <div class="content-card">
+            <div class="card-header">
+                <div class="card-icon">
+                    <i class="fas fa-file-upload"></i>
+                </div>
+                <h2>Upload Payment Receipt</h2>
+            </div>
+            
             <form id="depositForm" method="POST" enctype="multipart/form-data">
-                <div class="file-upload" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <div class="file-upload-text">Click to upload payment receipt</div>
-                    <div class="file-upload-small">(JPG, PNG, PDF - Max 5MB)</div>
-                    <div class="file-name" id="fileName"></div>
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <div class="upload-text-main">Click to upload receipt</div>
+                    <div class="upload-text-sub">Supports JPG, PNG, PDF • Max 5MB</div>
                 </div>
                 <input type="file" id="fileInput" name="receipt" accept="image/*,.pdf" required>
+                
+                <div class="file-info" id="fileName">
+                    <div class="file-name-display">
+                        <i class="fas fa-check-circle"></i>
+                        <span id="file-name-text"></span>
+                    </div>
+                </div>
+                
                 <img id="previewImage" class="preview-image" alt="Receipt preview">
-
+                
                 <button type="submit" class="submit-btn" id="submitBtn">
                     <i class="fas fa-paper-plane"></i>
                     Submit Deposit Request
@@ -431,12 +543,13 @@
 
         const fileInput = document.getElementById('fileInput');
         const fileName = document.getElementById('fileName');
+        const fileNameText = document.getElementById('file-name-text');
         const previewImage = document.getElementById('previewImage');
 
         fileInput.addEventListener('change', function (e) {
             const file = e.target.files[0];
             if (file) {
-                fileName.textContent = '✓ ' + file.name;
+                fileNameText.textContent = file.name;
                 fileName.style.display = 'block';
 
                 if (file.type.startsWith('image/')) {
@@ -474,24 +587,24 @@
                 method: 'POST',
                 body: formData
             })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showAlert('success', data.message);
-                        setTimeout(() => {
-                            window.location.href = '{{ url_for("deposit_history") }}';
-                        }, 2000);
-                    } else {
-                        showAlert('error', data.message || 'Failed to submit deposit request');
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Deposit Request';
-                    }
-                })
-                .catch(error => {
-                    showAlert('error', 'An error occurred. Please try again.');
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showAlert('success', data.message);
+                    setTimeout(() => {
+                        window.location.href = '{{ url_for("deposit_history") }}';
+                    }, 2000);
+                } else {
+                    showAlert('error', data.message || 'Failed to submit deposit request');
                     submitBtn.disabled = false;
                     submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Deposit Request';
-                });
+                }
+            })
+            .catch(error => {
+                showAlert('error', 'An error occurred. Please try again.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Submit Deposit Request';
+            });
         });
 
         function showAlert(type, message) {
@@ -504,21 +617,24 @@
             alertError.style.display = 'none';
 
             if (type === 'success') {
-                successMessage.textContent = message;
-                alertSuccess.style.display = 'block';
+                successMessage.textContent = ' ' + message;
+                alertSuccess.style.display = 'flex';
+                alertSuccess.style.alignItems = 'center';
+                alertSuccess.style.gap = '10px';
                 setTimeout(() => {
                     alertSuccess.style.display = 'none';
                 }, 5000);
             } else {
-                errorMessage.textContent = message;
-                alertError.style.display = 'block';
+                errorMessage.textContent = ' ' + message;
+                alertError.style.display = 'flex';
+                alertError.style.alignItems = 'center';
+                alertError.style.gap = '10px';
             }
 
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-    </script>    
+    </script>
     <!-- Vercel Web Analytics -->
     <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
-
 </body>
 </html>

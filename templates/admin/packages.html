@@ -33,6 +33,9 @@
 					</td>
 					<td>
 						<a href="{{ url_for('admin.edit_package', package_id=p.id) }}" class="btn btn-sm btn-secondary">Edit</a>
+						<form method="POST" action="{{ url_for('admin.delete_package', package_id=p.id) }}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this package?');">
+							<button type="submit" class="btn btn-sm btn-danger">Delete</button>
+						</form>
 					</td>
 				</tr>
 				{% else %}

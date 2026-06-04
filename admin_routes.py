@@ -1595,7 +1595,7 @@ def edit_package(package_id):
                          admin=get_current_admin(),
                          package=package)
 
-@admin_bp.route('/api/package/<int:package_id>/delete', methods=['POST', 'DELETE'])
+@admin_bp.route('/packages/<int:package_id>/delete', methods=['POST'])
 @require_admin_login
 def delete_package(package_id):
     """Delete package (soft delete by deactivating)"""
@@ -1611,17 +1611,29 @@ def delete_package(package_id):
         
         if users_with_package and users_with_package['count'] > 0:
             conn.close()
-            return jsonify({'success': False, 'message': 'Cannot delete package that is currently in use by users.'})
+            if request.is_json:
+                return jsonify({'success': False, 'message': 'Cannot delete package that is currently in use by users.'})
+            else:
+                flash('Cannot delete package that is currently in use by users.', 'error')
+                return redirect(url_for('admin.packages'))
         
         # Soft delete by deactivating
         conn.execute('UPDATE package SET is_active = 0 WHERE id = ?', (package_id,))
         conn.commit()
         conn.close()
         
-        return jsonify({'success': True, 'message': 'Package deleted successfully.'})
+        if request.is_json:
+            return jsonify({'success': True, 'message': 'Package deleted successfully.'})
+        else:
+            flash('Package deleted successfully!', 'success')
+            return redirect(url_for('admin.packages'))
     
     conn.close()
-    return jsonify({'success': False, 'message': 'Package not found.'})
+    if request.is_json:
+        return jsonify({'success': False, 'message': 'Package not found.'})
+    else:
+        flash('Package not found', 'error')
+        return redirect(url_for('admin.packages'))
 
 @admin_bp.route('/deposits/pending')
 @require_admin_login

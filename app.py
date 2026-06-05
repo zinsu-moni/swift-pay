@@ -456,12 +456,16 @@ try:
 except Exception as e:
     print(f"⚠️  Admin routes initialization: {e}")
 
+# Flag to track if database is initialized
+db_initialized = False
+
 # Refresh system settings before every request to keep them up to date
 @app.before_request
 def refresh_system_settings():
     """Refresh system settings from DB on every request"""
-    global SYSTEM_SETTINGS
-    SYSTEM_SETTINGS = load_system_settings()
+    global SYSTEM_SETTINGS, db_initialized
+    if db_initialized:
+        SYSTEM_SETTINGS = load_system_settings()
 
 # Initialize database before first request
 @app.before_request
@@ -480,8 +484,9 @@ def initialize_database():
             ensure_withdrawal_schema()
             
             # Load system settings from DB
-            global SYSTEM_SETTINGS
+            global SYSTEM_SETTINGS, db_initialized
             SYSTEM_SETTINGS = load_system_settings()
+            db_initialized = True
             print("✅ System settings loaded from DB")
             
             # Initialize admin database - CREATE TABLES FIRST

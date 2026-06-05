@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Deposit Payment - SWIFTPAY</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/loader.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         .gtr-container {
@@ -276,7 +275,6 @@
         </div>
     </div>
 
-    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
     <script>
         const minimumDeposit = {{ minimum_deposit|default(3000)|int }};
         const maximumDeposit = {{ maximum_deposit|default(10000)|int }};
@@ -337,8 +335,6 @@
                 return;
             }
 
-            // Show global loader
-            showLoader('Processing payment...', 'Creating payment request');
             const payBtn = document.getElementById('payBtn');
             payBtn.disabled = true;
 
@@ -358,7 +354,6 @@
                     if (ok) {
                         processDeposit(amount);
                     } else {
-                        hideLoader();
                         payBtn.disabled = false;
                     }
                 });
@@ -380,27 +375,22 @@
                     // Decide based on backend response
                     if (data.success) {
                         if (data.payment_url) {
-                            showLoader('Opening payment page...', 'Complete the payment in the current tab');
-
                             setTimeout(() => {
                                 window.location.href = data.payment_url;
                             }, 250);
 
-                            hideLoader();
                             showToast('Payment opened in the current tab. Finish payment there and return to the site once complete.', 'success');
                         } else {
                             // Fallback - should not happen in normal flow
-                            showLoaderSuccess('Deposit successful!', `₦${amount.toLocaleString()} added to your account`);
+                            showToast('Deposit successful! ₦' + amount.toLocaleString() + ' added to your account', 'success');
                             setTimeout(() => { window.location.href = '/dashboard'; }, 900);
                         }
                     } else {
-                        hideLoader();
                         showToast('Payment creation failed: ' + (data.message || 'Unknown error'), 'danger');
                         document.getElementById('payBtn').disabled = false;
                     }
                 })
                 .catch(error => {
-                    hideLoader();
                     showToast('Network error occurred. Please try again.', 'danger');
                     document.getElementById('payBtn').disabled = false;
                 });

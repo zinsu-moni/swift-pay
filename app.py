@@ -456,6 +456,13 @@ try:
 except Exception as e:
     print(f"⚠️  Admin routes initialization: {e}")
 
+# Refresh system settings before every request to keep them up to date
+@app.before_request
+def refresh_system_settings():
+    """Refresh system settings from DB on every request"""
+    global SYSTEM_SETTINGS
+    SYSTEM_SETTINGS = load_system_settings()
+
 # Initialize database before first request
 @app.before_request
 def initialize_database():
@@ -473,6 +480,7 @@ def initialize_database():
             ensure_withdrawal_schema()
             
             # Load system settings from DB
+            global SYSTEM_SETTINGS
             SYSTEM_SETTINGS = load_system_settings()
             print("✅ System settings loaded from DB")
             

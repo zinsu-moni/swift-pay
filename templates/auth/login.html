@@ -27,18 +27,15 @@
     }
 
     .mobile-logo {
-        width: 74px;
-        height: 74px;
+        width: 100px;
         margin: 6px auto 18px;
-        border-radius: 999px;
-        background: #87ceeb;
         display: grid;
         place-items: center;
     }
 
     .mobile-logo img {
-        width: 48px;
-        height: 48px;
+        width: 100px;
+        height: auto;
         object-fit: contain;
     }
 
@@ -126,10 +123,6 @@
 {% block content %}
 <section class="mobile-auth-page">
     <div class="mobile-auth-card">
-        <div class="mobile-logo">
-            <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="SWIFTPAY logo">
-        </div>
-
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
         <div class="flash-stack">
